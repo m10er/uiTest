@@ -1,5 +1,7 @@
 import { BaseHelper } from './baseHelper';
 import { Page } from '@playwright/test';
+import { NewUserBody } from '../models/newUserBody';
+import { LoginBody } from '../models/loginBody';
 
 
 export class RegisterPage extends BaseHelper{
@@ -11,11 +13,11 @@ export class RegisterPage extends BaseHelper{
         this.page=page;
     }
 
-    async setNewUser():Promise<void>{
+    async setNewUser(newUser:NewUserBody):Promise<void>{
         await this.page.getByRole('textbox', { name: 'Name' }).click();
-        await this.page.getByRole('textbox', { name: 'Name' }).fill('Deneme');
+        await this.page.getByRole('textbox', { name: 'Name' }).fill(newUser.name);
         await this.page.locator('form').filter({ hasText: 'Signup' }).getByPlaceholder('Email Address').click();
-        await this.page.locator('form').filter({ hasText: 'Signup' }).getByPlaceholder('Email Address').fill('de343wdsa2neme@deneme.com');
+        await this.page.locator('form').filter({ hasText: 'Signup' }).getByPlaceholder('Email Address').fill(newUser.email);
         await this.page.getByRole('button', { name: 'Signup' }).click();
     }
 
@@ -50,4 +52,12 @@ export class RegisterPage extends BaseHelper{
         return await this.page.locator('#form').isVisible();
     }
 
+
+    async setLoginForm(loginBody:LoginBody):Promise<void>{
+        await this.page.locator('form').filter({ hasText: 'Login' }).getByPlaceholder('Email Address').click();
+        await this.page.locator('form').filter({ hasText: 'Login' }).getByPlaceholder('Email Address').fill(loginBody.email);
+        await this.page.getByRole('textbox', { name: 'Password' }).click();
+        await this.page.getByRole('textbox', { name: 'Password' }).fill(loginBody.password);
+        await this.page.getByRole('button', { name: 'Login' }).click();
+    }
 }
